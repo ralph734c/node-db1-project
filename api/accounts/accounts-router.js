@@ -1,27 +1,74 @@
-const router = require('express').Router()
+const {
+  getAll,
+  getById,
+  create,
+  updateById,
+  deleteById,
+} = require('./accounts-model');
 
-router.get('/', (req, res, next) => {
-  // DO YOUR MAGIC
-})
+const {
+  checkAccountId,
+  checkAccountNameUnique,
+  checkAccountPayload,
+} = require('./accounts-middleware');
 
-router.get('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
-})
+const router = require('express').Router();
 
-router.post('/', (req, res, next) => {
-  // DO YOUR MAGIC
-})
-
-router.put('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
+router.get('/', async (req, res, next) => {
+  try {
+    console.log(`${req.method} all accounts`)
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
-})
+router.get('/:id', checkAccountId, (req, res, next) => {
+  try {
+    console.log(`${req.method} a specific account`)
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post(
+  '/',
+  checkAccountPayload,
+  checkAccountNameUnique,
+  (req, res, next) => {
+    try {
+      console.log(`${req.method} an account`)
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  '/:id',
+  checkAccountId,
+  checkAccountPayload,
+  checkAccountNameUnique,
+  (req, res, next) => {
+    try {
+      console.log(`${req.method} an account`)
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.delete('/:id', checkAccountId, (req, res, next) => {
+  try {
+    console.log(`${req.method} an account`)
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.use((err, req, res, next) => { // eslint-disable-line
-  // DO YOUR MAGIC
-})
+  res.status(err.status || 500).json({
+    message: err.message,
+  });
+});
 
 module.exports = router;
