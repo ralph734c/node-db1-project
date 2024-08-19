@@ -54,7 +54,8 @@ router.put(
 
 router.delete('/:id', checkAccountId, async (req, res, next) => {
   try {
-    await accountsModel.deleteById(req.params.id);
+    const deletedAcct = await accountsModel.deleteById(req.params.id);
+    res.json(deletedAcct)
   } catch (error) {
     next(error);
   }
