@@ -12,8 +12,8 @@ const getByName = (name) => {
   return db('accounts').where('name', name).first();
 }
 
-const create = (account) => {
-  const [id] = db('accounts').insert(account);
+const create = async (account) => {
+  const [id] = await db('accounts').insert(account);
   return getById(id);
 };
 
