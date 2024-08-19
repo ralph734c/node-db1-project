@@ -10,7 +10,6 @@ const router = require('express').Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    console.log(`${req.method} all accounts`);
     const accounts = await accountsModel.getAll();
     res.json(accounts);
   } catch (error) {
@@ -19,16 +18,17 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', checkAccountId, async (req, res, next) => {
-  res.json(req.account)
+  res.json(req.account);
 });
 
 router.post(
   '/',
   checkAccountPayload,
   checkAccountNameUnique,
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      console.log(`${req.method} an account`);
+      const newAccount = await accountsModel.create(req.body);
+      res.status(201).json(newAccount);
     } catch (error) {
       next(error);
     }
@@ -39,19 +39,22 @@ router.put(
   '/:id',
   checkAccountId,
   checkAccountPayload,
-  checkAccountNameUnique,
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      console.log(`${req.method} an account`);
+      const updatedAccount = await accountsModel.updateById(
+        req.params.id,
+        req.body
+      );
+      res.json(updatedAccount);
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.delete('/:id', checkAccountId, (req, res, next) => {
+router.delete('/:id', checkAccountId, async (req, res, next) => {
   try {
-    console.log(`${req.method} an account`);
+    await accountsModel.deleteById(req.params.id);
   } catch (error) {
     next(error);
   }
