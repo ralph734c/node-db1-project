@@ -1,10 +1,4 @@
-const {
-  getAll,
-  getById,
-  create,
-  updateById,
-  deleteById,
-} = require('./accounts-model');
+const accountsModel = require('./accounts-model');
 
 const {
   checkAccountId,
@@ -16,15 +10,19 @@ const router = require('express').Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    console.log(`${req.method} all accounts`)
+    console.log(`${req.method} all accounts`);
+    const accounts = await accountsModel.getAll();
+    res.json(accounts);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id', checkAccountId, (req, res, next) => {
+router.get('/:id', checkAccountId, async (req, res, next) => {
   try {
-    console.log(`${req.method} a specific account`)
+    console.log(`${req.method} a specific account`);
+    const account = await accountsModel.getById(req.params.id);
+    res.json(account)
   } catch (error) {
     next(error);
   }
@@ -36,7 +34,7 @@ router.post(
   checkAccountNameUnique,
   (req, res, next) => {
     try {
-      console.log(`${req.method} an account`)
+      console.log(`${req.method} an account`);
     } catch (error) {
       next(error);
     }
@@ -50,7 +48,7 @@ router.put(
   checkAccountNameUnique,
   (req, res, next) => {
     try {
-      console.log(`${req.method} an account`)
+      console.log(`${req.method} an account`);
     } catch (error) {
       next(error);
     }
@@ -59,7 +57,7 @@ router.put(
 
 router.delete('/:id', checkAccountId, (req, res, next) => {
   try {
-    console.log(`${req.method} an account`)
+    console.log(`${req.method} an account`);
   } catch (error) {
     next(error);
   }
