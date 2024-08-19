@@ -19,13 +19,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', checkAccountId, async (req, res, next) => {
-  try {
-    console.log(`${req.method} a specific account`);
-    const account = await accountsModel.getById(req.params.id);
-    res.json(account)
-  } catch (error) {
-    next(error);
-  }
+  res.json(req.account)
 });
 
 router.post(
