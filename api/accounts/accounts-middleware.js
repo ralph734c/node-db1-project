@@ -23,15 +23,18 @@ exports.checkAccountPayload = (req, res, next) => {
 };
 
 exports.checkAccountNameUnique = async (req, res, next) => {
-  const { name } = req.body;
-  const allAccounts = await accountsModel.getAll();
-
-  const accountExists = allAccounts.find((account) => {
-    account.name === name;
-    return account.name;
-  });
-  if (accountExists) {
-    res.status(400).json({ message: 'that name is taken' });
+  try {
+    const accountExisting = await accountsModel.getByName(req.body.name.trim());
+    if (accountExisting) {
+      next({
+        status: 400,
+        message: 'that name is taken',
+      });
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
