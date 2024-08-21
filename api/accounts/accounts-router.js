@@ -18,7 +18,11 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', checkAccountId, async (req, res, next) => {
-  res.json(req.account);
+  try {
+    res.json(req.account);
+  } catch (error) {
+    next(error)
+  }
 });
 
 router.post(
