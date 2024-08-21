@@ -22,9 +22,9 @@ const updateById = async (id, account) => {
   return getById(id);
 };
 
-const deleteById = (id) => {
-  const deletedAccount = getById(id);
-  db('accounts').where('id', id).del();
+const deleteById = async (id) => {
+  const deletedAccount = await getById(id);
+  await db('accounts').where('id', id).del();
   return deletedAccount;
 };
 

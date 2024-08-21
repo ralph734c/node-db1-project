@@ -3,11 +3,11 @@ const accountsModel = require('./accounts-model');
 exports.checkAccountPayload = (req, res, next) => {
   const { name, budget } = req.body;
   const error = { status: 400 };
-  if (typeof budget !== 'number' || isNaN(budget)) {
-    error.message = 'budget of account must be a number';
-    next(error);
-  } else if (!name || !budget) {
+  if (!name || budget === undefined) {
     error.message = 'name and budget are required';
+    next(error);
+  } else if (typeof budget !== 'number' || isNaN(budget)) {
+    error.message = 'budget of account must be a number';
     next(error);
   } else if (name.trim().length < 3 || name.trim().length > 100) {
     error.message = 'name of account must be between 3 and 100';
@@ -19,7 +19,10 @@ exports.checkAccountPayload = (req, res, next) => {
 
   if (error.message) {
     next(error);
-  } else next();
+  } else {
+    req.body.name = req.body.name.trim();
+    next();
+  }
 };
 
 exports.checkAccountNameUnique = async (req, res, next) => {
